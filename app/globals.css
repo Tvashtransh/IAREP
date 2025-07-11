@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile-first base styles */
+@layer base {
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Responsive typography */
+  h1 {
+    @apply text-2xl font-bold leading-tight;
+  }
+  
+  h2 {
+    @apply text-xl font-semibold leading-tight;
+  }
+  
+  h3 {
+    @apply text-lg font-medium leading-tight;
+  }
+  
+  p {
+    @apply text-base leading-relaxed;
+  }
+  
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    h1 {
+      @apply text-4xl;
+    }
+    
+    h2 {
+      @apply text-3xl;
+    }
+    
+    h3 {
+      @apply text-2xl;
+    }
+    
+    p {
+      @apply text-lg;
+    }
+  }
+  
+  /* Desktop and up */
+  @media (min-width: 1024px) {
+    h1 {
+      @apply text-5xl;
+    }
+    
+    h2 {
+      @apply text-4xl;
+    }
+    
+    h3 {
+      @apply text-3xl;
+    }
+  }
+}
+
+/* Component layer for reusable patterns */
+@layer components {
+  .container-responsive {
+    @apply w-full mx-auto px-4;
+    @apply sm:px-6 lg:px-8;
+    @apply max-w-7xl;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white;
+    @apply px-4 py-2 rounded-lg font-medium;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-accent-500 hover:bg-accent-600 text-white;
+    @apply px-4 py-2 rounded-lg font-medium;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-4;
+    @apply md:p-6 lg:p-8;
+    @apply border border-gray-200;
+  }
+}
+
+/* Utility layer for custom utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+} 
