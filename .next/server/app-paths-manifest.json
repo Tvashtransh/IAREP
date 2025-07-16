@@ -1,5 +1,7 @@
 {
-  "/api/submit-pitch/route": "app/api/submit-pitch/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/pitch/page": "app/pitch/page.js"
+  "/business-form/page": "app/business-form/page.js",
+  "/startup-jobs/page": "app/startup-jobs/page.js",
+  "/startup-jobs/apply/page": "app/startup-jobs/apply/page.js"
 }

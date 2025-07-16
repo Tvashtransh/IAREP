@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CustomSelect from '../components/CustomSelect.jsx';
 
@@ -309,6 +309,10 @@ export default function PitchPage() {
   const [founderAscendThon, setFounderAscendThon] = useState('');
   const [founderStep6Errors, setFounderStep6Errors] = useState<any>({});
 
+  // Add missing founder state variables for API
+  const [founderPastStartupStages, setFounderPastStartupStages] = useState<string[]>([]);
+  const [founderSupportNeeded, setFounderSupportNeeded] = useState<string[]>([]);
+
   // Role selection validation error state
   const [showRoleError, setShowRoleError] = useState(false);
   
@@ -340,6 +344,18 @@ export default function PitchPage() {
     achievements: ''
   });
   const [founderBusinessDetailsStepErrors, setFounderBusinessDetailsStepErrors] = useState<any>({});
+
+  // Add state for aspiring Goals & Funding step
+  const [aspiringInvestmentDetails, setAspiringInvestmentDetails] = useState('');
+  const [aspiringFundingRequirement, setAspiringFundingRequirement] = useState('');
+  const [aspiringSelfInvested, setAspiringSelfInvested] = useState('');
+
+  // Auto-submit form when reaching thank you steps for founders
+  useEffect(() => {
+    if (step === 10 && selected === 'founder' && !isSubmitting) {
+      handleFormSubmit();
+    }
+  }, [step, selected, isSubmitting]);
 
   // --- Form Submission Handler ---
   const handleFormSubmit = async () => {
@@ -373,7 +389,55 @@ export default function PitchPage() {
         aspiringPitchDeckFile,
         founderPitchDeckFile,
         aspiringPitchDeckLink,
-        founderPitchDeckLink
+        founderPitchDeckLink,
+        // Add missing variables
+        aspiringDuration,
+        aspiringValidation,
+        aspiringPrototype,
+        aspiringHasBusiness,
+        aspiringHasTeam,
+        aspiringSkills,
+        aspiringChallenge,
+        aspiringMotivation,
+        aspiringGoals,
+        aspiringConsent,
+        // Add missing aspiring variables
+        aspiringIdea,
+        aspiringPitchDeckUploadMethod,
+        aspiringTimelineSupport,
+        aspiringInvestmentDetails,
+        aspiringFundingRequirement,
+        aspiringSelfInvested,
+        // Add missing founder variables
+        founderIdea,
+        founderProductStatus,
+        founderPitchDeckUploadMethod,
+        founderHasPastExp,
+        founderPastExpDetails,
+        founderTeamStatus,
+        founderMissingRoles,
+        founderTeamConfidence,
+        founderLaunchPlan,
+        founderFunding,
+        founderPersonalInvestment,
+        founderInvestmentDetails,
+        founderSupport,
+        founderSupportOther,
+        founderContext,
+        founderHasTeam,
+        founderSkills,
+        founderChallenge,
+        founderMotivation,
+        founderGoals,
+        founderConsent,
+        goal1,
+        goal2,
+        goal3,
+        launchPlan,
+        fundingRequirement,
+        selfInvested,
+        founderPastStartupStages,
+        founderSupportNeeded
       };
 
       const response = await fetch('/api/submit-pitch', {
@@ -388,6 +452,10 @@ export default function PitchPage() {
 
       if (result.success) {
         setShowSuccess(true);
+        // Navigate to thank you page for aspiring entrepreneurs
+        if (selected === 'aspiring') {
+          setStep(10);
+        }
       } else {
         setSubmitError(result.error || 'Failed to submit form');
       }
@@ -721,7 +789,7 @@ export default function PitchPage() {
                           </svg>
                         </button>
                       </div>
-                      <StepBar step={1} totalSteps={selected === 'aspiring' ? 9 : selected === 'founder' ? 9 : 5} />
+                      <StepBar step={1} totalSteps={11} />
                       <div className="text-2xl font-bold text-[#23262F] mb-2 mt-[45px]">Which best describes you?</div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-6 md:gap-12 mb-8 justify-center">
@@ -783,7 +851,7 @@ export default function PitchPage() {
                   {/* Left: Form */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={2} totalSteps={9} />
+                      <StepBar step={2} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Basic Details</div>
                       <form className="space-y-4 w-full">
                         <div>
@@ -847,7 +915,7 @@ export default function PitchPage() {
                   {/* Left: Form */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={2} totalSteps={9} />
+                      <StepBar step={2} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Basic Details</div>
                       <form className="space-y-4 w-full">
                         <div>
@@ -896,7 +964,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/filling.png" alt="Step illustration" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Your Input Drives Our Platform</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -911,7 +979,7 @@ export default function PitchPage() {
                   {/* Left: Aspiring Idea Info */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                                              <StepBar step={3} totalSteps={9} />
+                                              <StepBar step={3} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Tell us about your idea</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -990,7 +1058,7 @@ export default function PitchPage() {
                   {/* Left: Idea Info */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={3} totalSteps={9} />
+                      <StepBar step={3} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Tell us about your Startup</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -1067,9 +1135,9 @@ export default function PitchPage() {
               {step === 4 && selected === 'aspiring' && (
                 <div className="flex w-full min-h-screen">
                   {/* Left: Form */}
-                  <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+                  <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={4} totalSteps={9} />
+                      <StepBar step={4} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Tell us more about your idea</div>
                       <form className="space-y-4 w-full">
                         <div>
@@ -1090,10 +1158,10 @@ export default function PitchPage() {
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Current Stage</label>
                           <CustomSelect
                             name="stage"
-                            value={STAGE_OPTIONS.find(opt => opt.value === aspiringIdeaDetailsStep.stage) || null}
-                            onChange={val => handleAspiringIdeaDetailsStepChange({ target: { name: 'stage', value: val } })}
+                            value={aspiringIdeaDetailsStep.stage as any}
+                            onChange={(val: any) => handleAspiringIdeaDetailsStepChange({ target: { name: 'stage', value: val } })}
                             placeholder="Select Stage"
-                            options={STAGE_OPTIONS}
+                            options={STAGE_OPTIONS as any}
                           />
                           {aspiringIdeaDetailsStepErrors.stage && <p className="text-red-500 text-xs mt-1">{aspiringIdeaDetailsStepErrors.stage}</p>}
                         </div>
@@ -1101,10 +1169,10 @@ export default function PitchPage() {
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Team Size</label>
                           <CustomSelect
                             name="team"
-                            value={TEAM_SIZE_OPTIONS.find(opt => opt.value === aspiringIdeaDetailsStep.team) || null}
-                            onChange={val => handleAspiringIdeaDetailsStepChange({ target: { name: 'team', value: val } })}
+                            value={aspiringIdeaDetailsStep.team as any}
+                            onChange={(val: any) => handleAspiringIdeaDetailsStepChange({ target: { name: 'team', value: val } })}
                             placeholder="Select Team Size"
-                            options={TEAM_SIZE_OPTIONS}
+                            options={TEAM_SIZE_OPTIONS as any}
                           />
                           {aspiringIdeaDetailsStepErrors.team && <p className="text-red-500 text-xs mt-1">{aspiringIdeaDetailsStepErrors.team}</p>}
                         </div>
@@ -1112,10 +1180,10 @@ export default function PitchPage() {
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Revenue Status</label>
                           <CustomSelect
                             name="revenue"
-                            value={REVENUE_STATUS_OPTIONS.find(opt => opt.value === aspiringIdeaDetailsStep.revenue) || null}
-                            onChange={val => handleAspiringIdeaDetailsStepChange({ target: { name: 'revenue', value: val } })}
+                            value={aspiringIdeaDetailsStep.revenue as any}
+                            onChange={(val: any) => handleAspiringIdeaDetailsStepChange({ target: { name: 'revenue', value: val } })}
                             placeholder="Select Revenue Status"
-                            options={REVENUE_STATUS_OPTIONS}
+                            options={REVENUE_STATUS_OPTIONS as any}
                           />
                           {aspiringIdeaDetailsStepErrors.revenue && <p className="text-red-500 text-xs mt-1">{aspiringIdeaDetailsStepErrors.revenue}</p>}
                         </div>
@@ -1135,10 +1203,10 @@ export default function PitchPage() {
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Business Model</label>
                           <CustomSelect
                             name="businessModel"
-                            value={BUSINESS_MODEL_OPTIONS.find(opt => opt.value === aspiringIdeaDetailsStep.businessModel) || null}
-                            onChange={val => handleAspiringIdeaDetailsStepChange({ target: { name: 'businessModel', value: val } })}
+                            value={aspiringIdeaDetailsStep.businessModel as any}
+                            onChange={(val: any) => handleAspiringIdeaDetailsStepChange({ target: { name: 'businessModel', value: val } })}
                             placeholder="Select Business Model"
-                            options={BUSINESS_MODEL_OPTIONS}
+                            options={BUSINESS_MODEL_OPTIONS as any}
                           />
                           {aspiringIdeaDetailsStepErrors.businessModel && <p className="text-red-500 text-xs mt-1">{aspiringIdeaDetailsStepErrors.businessModel}</p>}
                         </div>
@@ -1182,7 +1250,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration + Heading/Subheading */}
-                  <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-[#F7F9FB] text-center">
+                  <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-white text-center">
                     <img src="/images/idea.png" alt="Step illustration" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Elaborate Your Vision</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1198,7 +1266,7 @@ export default function PitchPage() {
                   {/* Left: Idea Validation */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                                              <StepBar step={5} totalSteps={9} />
+                                              <StepBar step={5} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Idea Validation</div>
                       <form className="space-y-6 w-full">
                         {/* How long they've been working on the idea */}
@@ -1392,7 +1460,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/Blogs/validate.png" alt="Idea Validation" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Validate Your Concept</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1407,7 +1475,7 @@ export default function PitchPage() {
                   {/* Left: Form */}
                   <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={4} totalSteps={10} />
+                      <StepBar step={4} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Tell us more about your business</div>
                       <form className="space-y-4 w-full">
                         <div>
@@ -1427,33 +1495,33 @@ export default function PitchPage() {
                         <div>
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Current Stage</label>
                           <CustomSelect
-                            options={STAGE_OPTIONS as any}
-                            value={STAGE_OPTIONS.find(opt => opt.value === founderBusinessDetailsStep.stage) || null}
+                            name="stage"
+                            value={founderBusinessDetailsStep.stage as any}
                             onChange={(val: any) => handleFounderBusinessDetailsStepChange({ target: { name: 'stage', value: val } })}
                             placeholder="Select Stage"
-                            name="stage"
+                            options={STAGE_OPTIONS as any}
                           />
                           {founderBusinessDetailsStepErrors.stage && <p className="text-red-500 text-xs mt-1">{founderBusinessDetailsStepErrors.stage}</p>}
                         </div>
                         <div>
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Team Size</label>
                           <CustomSelect
-                            options={TEAM_SIZE_OPTIONS as any}
-                            value={TEAM_SIZE_OPTIONS.find(opt => opt.value === founderBusinessDetailsStep.team) || null}
+                            name="team"
+                            value={founderBusinessDetailsStep.team as any}
                             onChange={(val: any) => handleFounderBusinessDetailsStepChange({ target: { name: 'team', value: val } })}
                             placeholder="Select Team Size"
-                            name="team"
+                            options={TEAM_SIZE_OPTIONS as any}
                           />
                           {founderBusinessDetailsStepErrors.team && <p className="text-red-500 text-xs mt-1">{founderBusinessDetailsStepErrors.team}</p>}
                         </div>
                         <div>
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Revenue Status</label>
                           <CustomSelect
-                            options={REVENUE_STATUS_OPTIONS as any}
-                            value={REVENUE_STATUS_OPTIONS.find(opt => opt.value === founderBusinessDetailsStep.revenue) || null}
+                            name="revenue"
+                            value={founderBusinessDetailsStep.revenue as any}
                             onChange={(val: any) => handleFounderBusinessDetailsStepChange({ target: { name: 'revenue', value: val } })}
                             placeholder="Select Revenue Status"
-                            name="revenue"
+                            options={REVENUE_STATUS_OPTIONS as any}
                           />
                           {founderBusinessDetailsStepErrors.revenue && <p className="text-red-500 text-xs mt-1">{founderBusinessDetailsStepErrors.revenue}</p>}
                         </div>
@@ -1472,11 +1540,11 @@ export default function PitchPage() {
                         <div>
                           <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Business Model</label>
                           <CustomSelect
-                            options={BUSINESS_MODEL_OPTIONS as any}
-                            value={BUSINESS_MODEL_OPTIONS.find(opt => opt.value === founderBusinessDetailsStep.businessModel) || null}
+                            name="businessModel"
+                            value={founderBusinessDetailsStep.businessModel as any}
                             onChange={(val: any) => handleFounderBusinessDetailsStepChange({ target: { name: 'businessModel', value: val } })}
                             placeholder="Select Business Model"
-                            name="businessModel"
+                            options={BUSINESS_MODEL_OPTIONS as any}
                           />
                           {founderBusinessDetailsStepErrors.businessModel && <p className="text-red-500 text-xs mt-1">{founderBusinessDetailsStepErrors.businessModel}</p>}
                         </div>
@@ -1520,7 +1588,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration + Heading/Subheading */}
-                  <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-[#F7F9FB] text-center">
+                  <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-white text-center">
                     <img src="/images/idea.png" alt="Step illustration" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Elaborate Your Business</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1530,13 +1598,13 @@ export default function PitchPage() {
                 </div>
               )}
 
-              {/* Step 4 for Early-Stage Founder - Startup Progress & Details */}
-              {step === 4 && selected === 'founder' && (
+              {/* Step 5 for Early-Stage Founder - Startup Progress & Details */}
+              {step === 5 && selected === 'founder' && (
                 <div className="flex w-full min-h-screen">
                   {/* Left: Startup Details Step 4 */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={4} totalSteps={9} />
+                      <StepBar step={5} totalSteps={11} />
                       <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Startup Progress & Details</div>
                       <form className="space-y-6 w-full">
                         {/* 1. What stage best describes your startup? */}
@@ -1631,80 +1699,47 @@ export default function PitchPage() {
                             <div>
                               {/* File Upload Area */}
                               <div
-                                className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                                className={`border-2 border-dashed rounded-lg p-6 text-center transition-all cursor-pointer ${
                                   founderIsDragOver
-                                    ? 'border-[#41E5FF] bg-blue-50'
-                                    : 'border-gray-300 hover:border-[#41E5FF]'
+                                    ? 'border-[#41E5FF] bg-[#F7FCFF]' 
+                                    : 'border-[#DEE3EB] bg-[#F7F9FB] hover:border-[#41E5FF] hover:bg-[#F7FCFF]'
                                 }`}
                                 onDragOver={handleFounderDragOver}
                                 onDragLeave={handleFounderDragLeave}
                                 onDrop={handleFounderDrop}
                               >
-                                <input
-                                  type="file"
-                                  id="founderPitchDeckFile"
-                                  accept=".pdf,.jpg,.jpeg,.png,.mp4,.mov,.ppt,.pptx"
-                                  onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) handlePitchDeckFileUpload(file, 'founder');
-                                  }}
-                                  className="hidden"
-                                />
-                                {founderPitchDeckFile ? (
-                                  <div className="space-y-2">
-                                    <div className="flex items-center justify-center text-green-600">
-                                      <svg className="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                      </svg>
-                                      File uploaded successfully!
-                                    </div>
-                                    <p className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                      {founderPitchDeckFile.name} ({(founderPitchDeckFile.size / (1024 * 1024)).toFixed(2)} MB)
-                                    </p>
-                                    <button
-                                      type="button"
-                                      onClick={() => setFounderPitchDeckFile(null)}
-                                      className="text-red-500 hover:text-red-700 text-sm"
-                                      style={{ fontFamily: 'Inter, sans-serif' }}
-                                    >
-                                      Remove file
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <div className="space-y-2">
-                                    <svg className="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                    <div>
-                                      <label htmlFor="founderPitchDeckFile" className="cursor-pointer">
-                                        <span className="text-[#41E5FF] hover:text-[#22CCB2] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                          Choose a file
-                                        </span>
-                                        <span className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}> or drag and drop</span>
-                                      </label>
-                                    </div>
-                                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                      PDF, JPG, PNG, MP4, MOV, PPT, PPTX up to 50MB
-                                    </p>
-                                  </div>
-                                )}
+                                <div className="flex flex-col items-center">
+                                  <svg className="w-8 h-8 text-[#41E5FF] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                  </svg>
+                                  <p className="text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}>
+                                    {founderPitchDeckFile ? founderPitchDeckFile.name : 'Drag and drop your file here, or click to browse'}
+                                  </p>
+                                  <p className="text-[#666] text-xs" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    PDF, PPT, PPTX, DOC, DOCX, MP4 (Max 10MB)
+                                  </p>
+                                </div>
                               </div>
+                              <input
+                                id="founder-pitch-deck-upload"
+                                type="file"
+                                className="hidden"
+                                accept=".pdf,.ppt,.pptx,.doc,.docx,.mp4"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handlePitchDeckFileUpload(file, 'founder');
+                                }}
+                              />
                             </div>
                           ) : (
-                            <div>
-                              {/* Link Input */}
-                              <input
-                                type="url"
-                                value={founderPitchDeckLink}
-                                onChange={(e) => setFounderPitchDeckLink(e.target.value)}
-                                className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
-                                style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
-                                placeholder="https://yourwebsite.com or https://drive.google.com/..."
-                              />
-                              <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                Share a link to your product, website, pitch deck, or demo video. Make sure the link is accessible to viewers.
-                              </p>
-                            </div>
+                            <input
+                              type="url"
+                              value={founderPitchDeckLink}
+                              onChange={(e) => setFounderPitchDeckLink(e.target.value)}
+                              className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
+                              style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                              placeholder="https://your-website.com or https://drive.google.com/..."
+                            />
                           )}
                         </div>
                         <div className="flex flex-row justify-between gap-6 mt-4 w-full">
@@ -1712,7 +1747,7 @@ export default function PitchPage() {
                             type="button"
                             className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
                             style={{ fontFamily: 'Inter, sans-serif' }}
-                            onClick={() => setStep(3)}
+                            onClick={() => setStep(4)}
                           >
                             Previous
                           </button>
@@ -1720,7 +1755,7 @@ export default function PitchPage() {
                             type="button"
                             className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
                             style={{ fontFamily: 'Inter, sans-serif' }}
-                            onClick={() => setStep(5)}
+                            onClick={() => setStep(6)}
                           >
                             Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           </button>
@@ -1729,7 +1764,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/jumping%20people.png" alt="Startup Progress & Growth" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Track Your Progress</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1744,7 +1779,7 @@ export default function PitchPage() {
                   {/* Left: Team & Skills */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                                              <StepBar step={6} totalSteps={9} />
+                                              <StepBar step={6} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Challenges & Approaches</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -1843,7 +1878,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/Challenges%20and%20approaches.png" alt="Challenges & Approaches" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Overcome Obstacles</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1858,7 +1893,7 @@ export default function PitchPage() {
                   {/* Left: Timeline & Support */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                                              <StepBar step={7} totalSteps={9} />
+                                              <StepBar step={7} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Timeline & Support</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -1903,7 +1938,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration (hidden on mobile) */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/building%20blocks.png" alt="Timeline & Support" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Build Your Future</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1918,7 +1953,7 @@ export default function PitchPage() {
                   {/* Left: Motivation & Goals */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={8} totalSteps={9} />
+                      <StepBar step={8} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Motivation & Goals</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -1947,16 +1982,16 @@ export default function PitchPage() {
                         </div>
                         <div className="flex flex-row justify-between gap-6 mt-4 w-full">
                           <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(7)}>Previous</button>
-                          <button type="button" className={`px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8] ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`} style={{ fontFamily: 'Inter, sans-serif' }} disabled={isSubmitting} onClick={() => {
+                          <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => {
                             // No validation needed for Motivation & Goals step - it's optional
-                            handleFormSubmit();
-                          }}>{isSubmitting ? 'Submitting...' : 'Submit'} {!isSubmitting && <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}</button>
+                            setStep(9);
+                          }}>Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
                         </div>
                       </form>
                     </div>
                   </div>
                   {/* Right: Illustration (hidden on mobile) */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/Blogs/vision.png" alt="Motivation & Goals" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Set Your Goals</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -1966,45 +2001,235 @@ export default function PitchPage() {
                 </div>
               )}
 
-              {/* Step 9 for Aspiring Entrepreneur - Final Submission */}
-              {step === 9 && selected === 'aspiring' && (
-                <div className="flex w-full min-h-screen justify-center bg-white">
-                  {/* Centered Content */}
-                  <div className="flex flex-col px-4 md:px-12 py-6 md:py-10 justify-center max-w-2xl mx-auto">
-                    <div className="w-full text-center">
-                      <StepBar step={8} totalSteps={8} />
+              {/* Step 9 for Aspiring Entrepreneur - Final Step Before Thank You */}
+              {/* Step 9: Goals & Funding (Aspiring) */}
+{step === 9 && selected === 'aspiring' && (
+  <div className="flex w-full min-h-screen">
+    <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+      <div className="max-w-lg mx-auto w-full">
+        <StepBar step={9} totalSteps={11} />
+        <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Goals & Funding</div>
+        <form className="space-y-6 w-full">
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              What are your top 3 goals for the next 6 months?
+            </div>
+            <textarea
+              value={aspiringGoals}
+              onChange={e => setAspiringGoals(e.target.value)}
+              rows={4}
+              className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F] resize-none"
+              style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+              placeholder='E.g., "Launch MVP", "Get 100 paying users", "Raise seed round"'
+            />
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              When do you plan to launch or scale your startup?
+            </div>
+            <div className="flex flex-col gap-2">
+              {['Within 1 month', '1-2 months', 'Under 3 months'].map(option => (
+                <label key={option} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="launchPlan"
+                    value={option}
+                    checked={aspiringTimeline === option}
+                    onChange={() => setAspiringTimeline(option)}
+                    className="accent-[#41E5FF]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              Do you have a funding requirement at this stage?
+            </div>
+            <div className="flex flex-col gap-2">
+              {['Not right now', 'Exploring options', 'Actively looking for funding', 'Already raised capital'].map(option => (
+                <label key={option} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="funding"
+                    value={option}
+                    checked={aspiringFundingRequirement === option}
+                    onChange={() => setAspiringFundingRequirement(option)}
+                    className="accent-[#41E5FF]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              Have you invested any of your own money into your current startup?
+            </div>
+            <div className="flex gap-6 mb-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="personalInvestment"
+                  value="yes"
+                                      checked={aspiringSelfInvested === 'yes'}
+                    onChange={() => setAspiringSelfInvested('yes')}
+                  className="accent-[#41E5FF]"
+                />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="personalInvestment"
+                  value="no"
+                                      checked={aspiringSelfInvested === 'no'}
+                    onChange={() => setAspiringSelfInvested('no')}
+                  className="accent-[#41E5FF]"
+                />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>No</span>
+              </label>
+            </div>
+            {aspiringSelfInvested === 'yes' && (
+              <div>
+                <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+                  If yes, please mention the approximate amount and its utilization:
+                </div>
+                <textarea
+                  value={aspiringInvestmentDetails}
+                  onChange={e => setAspiringInvestmentDetails(e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F] resize-none"
+                  style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                  placeholder="E.g., Invested ₹5L in product development and marketing"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-row justify-between gap-6 mt-4 w-full">
+            <button
+              type="button"
+              className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              onClick={() => setStep(8)}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              onClick={() => setStep(10)}
+            >
+              Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+      <img src="/images/idea.png" alt="Goals & Funding" className="max-w-lg w-full mb-8" />
+      <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Plan Your Growth</div>
+      <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+        Share your goals and funding plans to help us understand your vision and provide the right support for your startup journey.
+      </div>
+    </div>
+  </div>
+)}
+
+{step === 10 && selected === 'aspiring' && (
+  <div className="flex w-full min-h-screen">
+    {/* Left: Final confirmation */}
+                  <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white flex items-center justify-center">
+                    <div className="max-w-lg mx-auto w-full text-center">
+                      <div className="mb-6">
+                        <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mx-auto mb-4">
+                          <circle cx="40" cy="40" r="40" fill="#41E5FF"/>
+                          <path d="M25 40l10 10 20-20" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <h2 className="font-archivo font-semibold text-[32px] md:text-[40px] mb-4 text-[#23262F]">Almost Done!</h2>
+                      <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">You're just one step away from submitting your idea and joining our amazing community.</p>
+                      <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Click below to complete your submission and get ready to turn your idea into reality!</p>
+                      <button
+                        type="button"
+                        className={`px-10 py-4 rounded-[10px] bg-[#41E5FF] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#22CCF8] flex items-center gap-3 justify-center mx-auto mb-4 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+                        style={{ display: 'inline-flex' }}
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          handleFormSubmit();
+                        }}
+                      >
+                        {isSubmitting ? 'Submitting...' : 'Submit My Idea'}
+                        {!isSubmitting && <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </button>
+                      <button
+                        type="button"
+                        className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] mx-auto"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        onClick={() => setStep(8)}
+                      >
+                        Previous
+                      </button>
+                    </div>
+                  </div>
+                  {/* Right: Illustration and Motivation */}
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
+                    <img src="/images/Blogs/submit idea.png" alt="Submit Idea" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Ready to Launch!</div>
+                    <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+                      Your entrepreneurial journey is about to begin. Take this final step and join thousands of aspiring entrepreneurs making their dreams come true!
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 10 for Aspiring Entrepreneur - Final Submission */}
+              {step === 10 && selected === 'aspiring' && (
+                <div className="flex w-full min-h-screen">
+                  {/* Left: Thank You Message and Join Button */}
+                  <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white flex items-center justify-center">
+                    <div className="max-w-lg mx-auto w-full text-center">
                       <div className="mb-6">
                         <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mx-auto mb-4">
                           <circle cx="40" cy="40" r="40" fill="#22CCB2"/>
                           <path d="M25 40l10 10 20-20" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
-                      <div className="mb-8 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Application Submitted Successfully!</div>
-                      <div className="mb-6" style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, fontWeight: 400, color: '#31343D' }}>
-                        Thank you for applying to IdeaAscend PitchWeek 2025. We've received your application and will review it carefully.
-                      </div>
-                      <div className="mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
-                        Our team will contact you within 5-7 business days with next steps. Keep an eye on your email for updates!
-                      </div>
-                      <div className="mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#6B7280' }}>
-                        Now, join the IdeaAscend Aspiring Entrepreneur Community to connect with other aspiring entrepreneurs, share your ideas, and get support as you build your startup.
-                    </div>
-                          <button
-                            type="button"
-                        className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#1CA88F] flex items-center gap-3 justify-center mx-auto mb-4" 
-                        onClick={() => window.open('https://chat.whatsapp.com/Koc003PxjZ49wBqwFpDENL', '_blank')}
-                          >
+                      <h2 className="font-archivo font-semibold text-[32px] md:text-[40px] mb-4 text-[#23262F]">Thank You for Submitting!</h2>
+                      <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your idea has been successfully submitted. Now, join the IdeaAscend Aspiring Entrepreneur Community!</p>
+                      <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with other aspiring entrepreneurs, share your ideas, and get support as you build your startup. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
+                      <a
+                        href="https://chat.whatsapp.com/Koc003PxjZ49wBqwFpDENL"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#25D366] flex items-center gap-3 justify-center mx-auto mb-4"
+                        style={{ display: 'inline-flex' }}
+                      >
                         Join IdeaAscend Aspiring Entrepreneur Community
                         <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          </button>
-                          <button
-                            type="button"
-                        className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] mx-auto" 
-                            style={{ fontFamily: 'Inter, sans-serif' }}
+                      </a>
+                      <button
+                        type="button"
+                        className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] mx-auto"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
                         onClick={() => setShowForm(false)}
-                          >
+                      >
                         Close
-                          </button>
+                      </button>
+                    </div>
+                  </div>
+                  {/* Right: Illustration and Motivation */}
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
+                    <img src="/images/Welcome Image.png" alt="Aspiring Success" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Turn Ideas Into Reality!</div>
+                    <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+                      Join an inspiring community of aspiring entrepreneurs who are turning their ideas into successful startups. Together, we'll transform dreams into reality!
                     </div>
                   </div>
                 </div>
@@ -2015,120 +2240,64 @@ export default function PitchPage() {
 
 
 
-              {/* Step 5 for Early-Stage Founder - Pitch Deck Upload */}
-              {step === 5 && selected === 'founder' && (
+              {/* Step 6 for Early-Stage Founder - Motivation & Goals */}
+              {step === 6 && selected === 'founder' && (
                 <div className="flex w-full min-h-screen">
-                  {/* Left: Pitch Deck Upload */}
+                  {/* Left: Motivation & Goals */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={5} totalSteps={8} />
-                      <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Pitch Deck & Materials</div>
+                      <StepBar step={6} totalSteps={11} />
+                      <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Motivation & Goals</div>
                       <form className="space-y-6 w-full">
                         <div>
-                          <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 600, color: '#23262F' }}>
-                            Product/Website/Pitch Deck/Video <span className="text-gray-400">(Optional)</span>
-                          </div>
-                          
-                          {/* Upload Method Toggle */}
-                          <div className="flex gap-4 mb-4">
-                            <button
-                              type="button"
-                              onClick={() => setFounderPitchDeckUploadMethod('file')}
-                              className={`px-4 py-2 rounded-md border transition-all ${
-                                founderPitchDeckUploadMethod === 'file' 
-                                  ? 'bg-[#41E5FF] text-white border-[#41E5FF]' 
-                                  : 'bg-white text-[#23262F] border-[#DEE3EB] hover:border-[#41E5FF]'
-                              }`}
-                              style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}
-                            >
-                              Upload File
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setFounderPitchDeckUploadMethod('link')}
-                              className={`px-4 py-2 rounded-md border transition-all ${
-                                founderPitchDeckUploadMethod === 'link' 
-                                  ? 'bg-[#41E5FF] text-white border-[#41E5FF]' 
-                                  : 'bg-white text-[#23262F] border-[#DEE3EB] hover:border-[#41E5FF]'
-                              }`}
-                              style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}
-                            >
-                              Share Link
-                            </button>
-                          </div>
-
-                          {founderPitchDeckUploadMethod === 'file' ? (
-                            <div>
-                              <div
-                                onDragOver={handleFounderDragOver}
-                                onDragLeave={handleFounderDragLeave}
-                                onDrop={handleFounderDrop}
-                                className={`border-2 border-dashed rounded-lg p-6 text-center transition-all cursor-pointer ${
-                                  founderIsDragOver 
-                                    ? 'border-[#41E5FF] bg-[#F7FCFF]' 
-                                    : 'border-[#DEE3EB] bg-[#F7F9FB] hover:border-[#41E5FF] hover:bg-[#F7FCFF]'
-                                }`}
-                                onClick={() => document.getElementById('founder-pitch-deck-upload')?.click()}
-                              >
-                                <div className="flex flex-col items-center">
-                                  <svg className="w-8 h-8 text-[#41E5FF] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                  </svg>
-                                  <p className="text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}>
-                                    {founderPitchDeckFile ? founderPitchDeckFile.name : 'Drag and drop your file here, or click to browse'}
-                                  </p>
-                                  <p className="text-[#666] text-xs" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                    PDF, PPT, PPTX, DOC, DOCX, MP4 (Max 10MB)
-                                  </p>
-                                </div>
-                              </div>
-                              <input
-                                id="founder-pitch-deck-upload"
-                                type="file"
-                                className="hidden"
-                                accept=".pdf,.ppt,.pptx,.doc,.docx,.mp4"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) handlePitchDeckFileUpload(file, 'founder');
-                                }}
-                              />
-                            </div>
-                          ) : (
-                            <input
-                              type="url"
-                              value={founderPitchDeckLink}
-                              onChange={(e) => setFounderPitchDeckLink(e.target.value)}
-                              className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
-                              style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
-                              placeholder="https://your-website.com or https://drive.google.com/..."
-                            />
-                          )}
+                          <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Why did you start this startup?</label>
+                          <textarea
+                            name="founderMotivation"
+                            value={founderMotivation}
+                            onChange={e => setFounderMotivation(e.target.value)}
+                            className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
+                            style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                            rows={3}
+                            placeholder="Share your motivation, vision, or personal story."
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>What do you hope to achieve in the next 6 months?</label>
+                          <textarea
+                            name="founderGoals"
+                            value={founderGoals}
+                            onChange={e => setFounderGoals(e.target.value)}
+                            className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
+                            style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                            rows={3}
+                            placeholder="E.g., scale product, raise funding, expand team, etc."
+                          />
                         </div>
                         <div className="flex flex-row justify-between gap-6 mt-4 w-full">
-                          <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(4)}>Previous</button>
-                          <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(6)}>Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+                          <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(5)}>Previous</button>
+                          <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(7)}>Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
                         </div>
                       </form>
                     </div>
                   </div>
                   {/* Right: Illustration (hidden on mobile) */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
-                    <img src="/images/goal%20target.png" alt="Pitch Materials" className="max-w-lg w-full mb-8" />
-                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Show Your Vision</div>
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
+                    <img src="/images/Blogs/vision.png" alt="Motivation & Goals" className="max-w-lg w-full mb-8" />
+                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Set Your Goals</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
-                      Share your pitch deck, demo, or website to help us understand your startup better and provide more targeted support.
+                      Your motivation and goals drive your journey. Share what inspires you and what you aim to accomplish in the near future.
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Step 6 for Early-Stage Founder */}
-              {step === 6 && selected === 'founder' && (
+              {/* Step 7 for Early-Stage Founder */}
+              {step === 7 && selected === 'founder' && (
                 <div className="flex w-full min-h-screen">
                   {/* Left: Challenges & Approaches */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={7} totalSteps={9} />
+                      <StepBar step={7} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Challenges & Approaches</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -2217,7 +2386,7 @@ export default function PitchPage() {
                     </div>
                   </div>
                   {/* Right: Illustration (hidden on mobile) */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/Challenges%20and%20approaches.png" alt="Challenges & Approaches" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Overcome Obstacles</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -2232,7 +2401,7 @@ export default function PitchPage() {
                   {/* Left: Timeline & Support */}
                   <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
                     <div className="max-w-lg mx-auto w-full">
-                      <StepBar step={8} totalSteps={9} />
+                      <StepBar step={8} totalSteps={11} />
                       <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Timeline & Support Needs</div>
                       <form className="space-y-6 w-full">
                         <div>
@@ -2285,22 +2454,22 @@ export default function PitchPage() {
                         </div>
                         <div className="flex flex-row justify-between gap-6 mt-4 w-full">
                           <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(7)}>Previous</button>
-                          <button type="button" className={`px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8] ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`} style={{ fontFamily: 'Inter, sans-serif' }} disabled={isSubmitting} onClick={() => {
+                          <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => {
                             const errors: any = {};
                             if (!founderTimeline) errors.timeline = 'Please select a timeline';
                             if (founderLookingFor.length === 0) errors.lookingFor = 'Select at least 1 option';
                             if (!founderAscendThon) errors.ascendThon = 'Please select an option';
                             setFounderStep6Errors(errors);
                             if (Object.keys(errors).length === 0) {
-                              handleFormSubmit();
+                              setStep(9);
                             }
-                          }}>{isSubmitting ? 'Submitting...' : 'Submit'} {!isSubmitting && <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}</button>
+                          }}>Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
                         </div>
                       </form>
                     </div>
                   </div>
                   {/* Right: Illustration (hidden on mobile) */}
-                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
                     <img src="/images/building%20blocks.png" alt="Timeline & Support" className="max-w-lg w-full mb-8" />
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Build Your Future</div>
                     <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
@@ -2311,44 +2480,186 @@ export default function PitchPage() {
               )}
 
               {/* Step 9 for Early-Stage Founder - Final Submission */}
-              {step === 9 && selected === 'founder' && (
-                <div className="flex w-full min-h-screen justify-center bg-white">
-                  {/* Centered Content */}
-                  <div className="flex flex-col px-4 md:px-12 py-6 md:py-10 justify-center max-w-2xl mx-auto">
-                    <div className="w-full text-center">
-                      <StepBar step={9} totalSteps={9} />
+              {/* Step 9: Goals & Funding */}
+{step === 9 && selected === 'founder' && (
+  <div className="flex w-full min-h-screen">
+    <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+      <div className="max-w-lg mx-auto w-full">
+        <StepBar step={9} totalSteps={11} />
+        <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Goals & Funding</div>
+        <form className="space-y-6 w-full">
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              What are your top 3 goals for the next 6 months?
+            </div>
+            <textarea
+              value={founderGoals}
+              onChange={e => setFounderGoals(e.target.value)}
+              rows={4}
+              className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F] resize-none"
+              style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+              placeholder='E.g., "Launch MVP", "Get 100 paying users", "Raise seed round"'
+            />
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              When do you plan to launch or scale your startup?
+            </div>
+            <div className="flex flex-col gap-2">
+              {['Within 1 month', '1-2 months', 'Under 3 months'].map(option => (
+                <label key={option} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="launchPlan"
+                    value={option}
+                    checked={founderLaunchPlan === option}
+                    onChange={() => setFounderLaunchPlan(option)}
+                    className="accent-[#41E5FF]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              Do you have a funding requirement at this stage?
+            </div>
+            <div className="flex flex-col gap-2">
+              {['Not right now', 'Exploring options', 'Actively looking for funding', 'Already raised capital'].map(option => (
+                <label key={option} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="funding"
+                    value={option}
+                    checked={founderFunding === option}
+                    onChange={() => setFounderFunding(option)}
+                    className="accent-[#41E5FF]"
+                  />
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+              Have you invested any of your own money into your current startup?
+            </div>
+            <div className="flex gap-6 mb-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="personalInvestment"
+                  value="yes"
+                  checked={founderPersonalInvestment === 'yes'}
+                  onChange={() => setFounderPersonalInvestment('yes')}
+                  className="accent-[#41E5FF]"
+                />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="personalInvestment"
+                  value="no"
+                  checked={founderPersonalInvestment === 'no'}
+                  onChange={() => setFounderPersonalInvestment('no')}
+                  className="accent-[#41E5FF]"
+                />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>No</span>
+              </label>
+            </div>
+            {founderPersonalInvestment === 'yes' && (
+              <div>
+                <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
+                  If yes, please mention the approximate amount and its utilization:
+                </div>
+                <textarea
+                  value={founderInvestmentDetails}
+                  onChange={e => setFounderInvestmentDetails(e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F] resize-none"
+                  style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                  placeholder="E.g., Invested ₹5L in product development and marketing"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-row justify-between gap-6 mt-4 w-full">
+            <button
+              type="button"
+              className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              onClick={() => setStep(8)}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              onClick={() => setStep(10)}
+            >
+              Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+      <img src="/images/idea.png" alt="Goals & Funding" className="max-w-lg w-full mb-8" />
+      <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Plan Your Growth</div>
+      <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+        Share your goals and funding plans to help us understand your vision and provide the right support for your startup journey.
+      </div>
+    </div>
+  </div>
+)}
+
+{step === 10 && selected === 'founder' && (
+                <div className="flex w-full min-h-screen">
+                  {/* Left: Thank You Message and Join Button */}
+                  <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white flex items-center justify-center">
+                    <div className="max-w-lg mx-auto w-full text-center">
                       <div className="mb-6">
                         <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mx-auto mb-4">
                           <circle cx="40" cy="40" r="40" fill="#22CCB2"/>
                           <path d="M25 40l10 10 20-20" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
-                      <div className="mb-8 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Application Submitted Successfully!</div>
-                      <div className="mb-6" style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, fontWeight: 400, color: '#31343D' }}>
-                        Thank you for applying to IdeaAscend PitchWeek 2025. We've received your application and will review it carefully.
-                      </div>
-                      <div className="mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
-                        Our team will contact you within 5-7 business days with next steps. Keep an eye on your email for updates!
-                      </div>
-                      <div className="mb-8" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#6B7280' }}>
-                        Now, join the IdeaAscend Founder Community to connect with other early-stage founders, share your journey, and get support as you build your startup.
-                      </div>
-                      <button 
-                        type="button" 
-                        className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#1CA88F] flex items-center gap-3 justify-center mx-auto mb-4" 
-                        onClick={() => window.open('https://chat.whatsapp.com/DiCkLNcqbEA16jTKEjKQxx', '_blank')}
+                      <h2 className="font-archivo font-semibold text-[32px] md:text-[40px] mb-4 text-[#23262F]">Thank You for Submitting!</h2>
+                      <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your information has been successfully submitted. Now, join the IdeaAscend Founder Community!</p>
+                      <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with other early-stage founders, share your journey, and get support as you build your startup. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
+                      <a
+                        href="https://chat.whatsapp.com/DiCkLNcqbEA16jTKEjKQxx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#25D366] flex items-center gap-3 justify-center mx-auto mb-4"
+                        style={{ display: 'inline-flex' }}
                       >
                         Join IdeaAscend Founder Community
                         <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </button>
-                      <button 
-                        type="button" 
-                        className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] mx-auto" 
-                        style={{ fontFamily: 'Inter, sans-serif' }} 
+                      </a>
+                      <button
+                        type="button"
+                        className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] mx-auto"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
                         onClick={() => setShowForm(false)}
                       >
                         Close
                       </button>
+                    </div>
+                  </div>
+                  {/* Right: Illustration and Motivation */}
+                  <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-white text-center px-4 md:px-8 py-6 md:py-10">
+                    <img src="/images/Blogs/team.png" alt="Founder Success" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Scale New Heights!</div>
+                    <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+                      Join an elite network of ambitious founders who are scaling innovative startups. Together, we'll conquer challenges and celebrate victories!
                     </div>
                   </div>
                 </div>

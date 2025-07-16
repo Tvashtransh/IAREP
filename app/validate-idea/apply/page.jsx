@@ -147,7 +147,7 @@ export default function ValidateIdeaFormPage() {
       const result = await response.json();
 
       if (result.success) {
-        setStep(7); // Go to success page
+        setStep(9); // Go to success page
       } else {
         setSubmitError(result.error || 'Failed to submit form');
       }
@@ -542,7 +542,7 @@ export default function ValidateIdeaFormPage() {
             {/* Left: Form */}
             <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
               <div className="max-w-lg mx-auto w-full">
-                <StepBar step={4} totalSteps={8} />
+                <StepBar step={4} totalSteps={9} />
                 <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Tell us more about your idea</div>
                 <form className="space-y-4 w-full">
                   <div>
@@ -690,13 +690,13 @@ export default function ValidateIdeaFormPage() {
             </div>
           </div>
         )}
-        {/* Step 4: Idea Validation */}
-        {step === 4 && (
+        {/* Step 5: Idea Validation */}
+        {step === 5 && (
           <div className="flex w-full min-h-screen">
             {/* Left: Idea Validation */}
             <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
               <div className="max-w-lg mx-auto w-full">
-                <StepBar step={4} totalSteps={7} />
+                <StepBar step={5} totalSteps={9} />
                 <div className="mb-4" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Idea Validation</div>
                 <form className="space-y-6 w-full">
                   {/* How long they've been working on the idea */}
@@ -871,7 +871,7 @@ export default function ValidateIdeaFormPage() {
                       type="button"
                       className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
                       style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => setStep(3)}
+                      onClick={() => setStep(4)}
                     >
                       Previous
                     </button>
@@ -879,7 +879,7 @@ export default function ValidateIdeaFormPage() {
                       type="button"
                       className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
                       style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => setStep(5)}
+                      onClick={() => setStep(6)}
                     >
                       Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
@@ -897,13 +897,13 @@ export default function ValidateIdeaFormPage() {
             </div>
           </div>
         )}
-        {/* Step 5: Challenges & Approaches */}
-        {step === 5 && (
+        {/* Step 6: Challenges & Approaches */}
+        {step === 6 && (
           <div className="flex w-full min-h-screen">
             {/* Left: Challenges & Approaches */}
             <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
               <div className="max-w-lg mx-auto w-full">
-                <StepBar step={5} totalSteps={7} />
+                <StepBar step={6} totalSteps={9} />
                 <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Challenges & Approaches</div>
                 <form className="space-y-6 w-full">
                   {/* Select up to 3 challenges */}
@@ -995,7 +995,7 @@ export default function ValidateIdeaFormPage() {
                       type="button"
                       className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
                       style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => setStep(4)}
+                      onClick={() => setStep(5)}
                     >
                       Previous
                     </button>
@@ -1009,10 +1009,10 @@ export default function ValidateIdeaFormPage() {
                         if (aspiringApproaches.length === 0) errors.approaches = 'Select at least 1 approach';
                         if (!aspiringSatisfaction) errors.satisfaction = 'Please select your satisfaction level';
                         setAspiringStep5Errors(errors);
-                        if (Object.keys(errors).length === 0) setStep(6);
+                        if (Object.keys(errors).length === 0) setStep(7);
                       }}
                     >
-                      Submit <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
                   </div>
                 </form>
@@ -1028,13 +1028,13 @@ export default function ValidateIdeaFormPage() {
             </div>
           </div>
         )}
-        {/* Step 6: Timeline & Support Needs */}
-        {step === 6 && (
+        {/* Step 7: Timeline & Support Needs */}
+        {step === 7 && (
           <div className="flex w-full min-h-screen">
             {/* Left: Timeline & Support Needs */}
             <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
               <div className="max-w-lg mx-auto w-full">
-                <StepBar step={6} totalSteps={7} />
+                <StepBar step={7} totalSteps={9} />
                 <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Timeline & Support Needs</div>
                 <form className="space-y-6 w-full">
                   {/* Timeline for launching */}
@@ -1117,7 +1117,7 @@ export default function ValidateIdeaFormPage() {
                       type="button"
                       className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
                       style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => setStep(5)}
+                      onClick={() => setStep(6)}
                     >
                       Previous
                     </button>
@@ -1154,11 +1154,46 @@ export default function ValidateIdeaFormPage() {
             </div>
           </div>
         )}
-        {/* Step 7: Thank You / Success */}
-        {step === 7 && (
+        {/* Step 8: Looking For & AscendThon */}
+        {step === 8 && (
           <div className="flex w-full min-h-screen">
-            {/* Left: Thank You Message */}
+            {/* Left: Looking For & AscendThon */}
             <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
+              <div className="max-w-lg mx-auto w-full">
+                <StepBar step={8} totalSteps={9} />
+                <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>What are you looking for?</div>
+                <form className="space-y-6 w-full">
+                  {/* ...form fields... */}
+                  <div className="flex flex-row justify-between gap-6 mt-4 w-full">
+                    <button
+                      type="button"
+                      className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                      onClick={() => setStep(7)}
+                    >
+                      Previous
+                    </button>
+                    <button
+                      type="button"
+                      className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                      onClick={handleFormSubmit}
+                    >
+                      Submit <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            {/* Right: Illustration */}
+            {/* ...existing code... */}
+          </div>
+        )}
+        {/* Step 9: Success Page */}
+        {step === 9 && (
+          <div className="flex w-full min-h-screen">
+            {/* Left: Thank You Message and Join Button */}
+            <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white flex items-center justify-center">
               <div className="max-w-lg mx-auto w-full text-center">
                 <div className="mb-6">
                   <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mx-auto mb-4">
@@ -1167,13 +1202,60 @@ export default function ValidateIdeaFormPage() {
                   </svg>
                 </div>
                 <h2 className="font-archivo font-semibold text-[32px] md:text-[40px] mb-4 text-[#23262F]">Thank You for Submitting!</h2>
-                <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your information has been successfully submitted. Now, join the IdeaAscend Aspiring Entrepreneur Community!</p>
-                <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with fellow aspiring founders, share your journey, and get support as you turn your idea into reality. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
-                <a href="https://chat.whatsapp.com/Koc003PxjZ49wBqwFpDENL" target="_blank" rel="noopener noreferrer" className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#1CA88F] flex items-center gap-3 justify-center">
+                {selected === 'aspiring' && (
+                  <>
+                    <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your idea has been successfully submitted. Now, join the IdeaAscend Aspiring Entrepreneur Community!</p>
+                    <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with other aspiring entrepreneurs, share your ideas, and get support as you build your startup. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
+                    <a
+                      href="https://chat.whatsapp.com/Koc003PxjZ49wBqwFpDENL"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#25D366] flex items-center gap-3 justify-center mx-auto"
+                      style={{ display: 'inline-flex' }}
+                    >
                   Join IdeaAscend Aspiring Entrepreneur Community
                   <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </a>
+                  </>
+                )}
+                {selected === 'founder' && (
+                  <>
+                    <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your information has been successfully submitted. Now, join the IdeaAscend Founder Community!</p>
+                    <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with other early-stage founders, share your journey, and get support as you build your startup. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
+                    <a
+                      href="https://chat.whatsapp.com/DiCkLNcqbEA16jTKEjKQxx"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#25D366] flex items-center gap-3 justify-center mx-auto"
+                      style={{ display: 'inline-flex' }}
+                    >
+                      Join IdeaAscend Founder Community
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </a>
+                  </>
+                )}
               </div>
+            </div>
+            {/* Right: Role-specific Image and Motivation */}
+            <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+              {selected === 'aspiring' && (
+                <>
+                  <Image src="/images/Welcome Image.png" alt="Aspiring Success" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Turn Ideas Into Reality!</div>
+                  <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+                    Join an inspiring community of aspiring entrepreneurs who are turning their ideas into successful startups. Together, we'll transform dreams into reality!
+          </div>
+                </>
+              )}
+              {selected === 'founder' && (
+                <>
+                  <Image src="/images/Blogs/team.png" alt="Founder Success" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Scale New Heights!</div>
+                  <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+                    Join an elite network of ambitious founders who are scaling innovative startups. Together, we'll conquer challenges and celebrate victories!
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

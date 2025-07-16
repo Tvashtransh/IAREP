@@ -18,6 +18,8 @@ export default function StartupJobsApplyPage() {
     linkedin: '',
   });
   const [userErrors, setUserErrors] = useState<any>({});
+  const [jobSeekerRoles, setJobSeekerRoles] = useState('');
+  const [jobSeekerHopes, setJobSeekerHopes] = useState('');
   const [jobSeekerConnect, setJobSeekerConnect] = useState<string[]>([]);
   const [jobSeekerCollab, setJobSeekerCollab] = useState<string[]>([]);
   const [hasStartupExp, setHasStartupExp] = useState('');
@@ -152,7 +154,7 @@ export default function StartupJobsApplyPage() {
         <div className="flex w-full min-h-screen">
           <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
             <div className="max-w-lg mx-auto w-full">
-              <StepBar step={1} totalSteps={5} />
+              <StepBar step={1} totalSteps={6} />
               <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Your basic information</div>
               <form className="space-y-6 w-full">
                 <div>
@@ -278,15 +280,17 @@ export default function StartupJobsApplyPage() {
         <div className="flex w-full min-h-screen">
           <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
             <div className="max-w-lg mx-auto w-full">
-              <StepBar step={2} totalSteps={5} />
+              <StepBar step={2} totalSteps={6} />
               <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Your Career Interests</div>
               <form className="space-y-6 w-full">
                 <div>
-                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>
                     What type of roles are you most interested in?
                   </div>
                   <input
                     type="text"
+                    value={jobSeekerRoles}
+                    onChange={e => setJobSeekerRoles(e.target.value)}
                     placeholder="E.g., Software Developer, Product Manager, Marketing, etc."
                     className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
                     style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
@@ -294,11 +298,13 @@ export default function StartupJobsApplyPage() {
                   />
                 </div>
                 <div>
-                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>
                     What are you hoping to get out of your next role?
                   </div>
                   <input
                     type="text"
+                    value={jobSeekerHopes}
+                    onChange={e => setJobSeekerHopes(e.target.value)}
                     placeholder="E.g., learning, mentorship, impact, growth, etc."
                     className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
                     style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
@@ -306,7 +312,7 @@ export default function StartupJobsApplyPage() {
                   />
                 </div>
                 <div>
-                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>
                     Select up to 5 topics that interest you:
                   </div>
                   <InterestsSelector />
@@ -346,26 +352,28 @@ export default function StartupJobsApplyPage() {
         <div className="flex w-full min-h-screen">
           <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
             <div className="max-w-lg mx-auto w-full">
-              <StepBar step={3} totalSteps={5} />
+              <StepBar step={3} totalSteps={6} />
               <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Your Experience & Preferences</div>
               <form className="space-y-6 w-full">
                 <div>
-                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
-                    Do you have any previous startup or project experience?
+                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>
+                    Have you had the chance to work in a startup environment before?
                   </div>
-                  <div className="flex gap-4">
-                    {['Yes', 'No'].map(opt => (
-                      <label key={opt} className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>
-                        <input type="radio" name="hasStartupExp" value={opt} checked={hasStartupExp === opt} onChange={() => setHasStartupExp(opt)} className="accent-[#41E5FF]" />
-                        <span>{opt}</span>
+                  <div className="flex gap-6 mb-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="hasStartupExp" value="yes" checked={hasStartupExp === 'yes'} onChange={() => setHasStartupExp('yes')} className="accent-[#41E5FF]" />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="hasStartupExp" value="no" checked={hasStartupExp === 'no'} onChange={() => setHasStartupExp('no')} className="accent-[#41E5FF]" />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>No</span>
                       </label>
-                    ))}
                   </div>
                 </div>
                 {hasStartupExp === 'Yes' && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Startup/Project Name</label>
+                      <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Name of the Startup:</label>
                       <input
                         name="name"
                         value={startupExpDetails.name}
@@ -376,7 +384,7 @@ export default function StartupJobsApplyPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Your Role</label>
+                      <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Your Role:</label>
                       <input
                         name="role"
                         value={startupExpDetails.role}
@@ -387,7 +395,7 @@ export default function StartupJobsApplyPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Duration</label>
+                      <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• How long did you work there?</label>
                       <input
                         name="duration"
                         value={startupExpDetails.duration}
@@ -398,7 +406,7 @@ export default function StartupJobsApplyPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>What did you learn or contribute?</label>
+                      <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• What value do you believe you added to the startup? <span className="text-gray-400">(1–2 lines)</span></label>
                       <input
                         name="value"
                         value={startupExpDetails.value}
@@ -409,7 +417,7 @@ export default function StartupJobsApplyPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>What did you feel was missing or challenging?</label>
+                      <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Based on your experience, what do you think most startups lack or struggle with? <span className="text-gray-400">(Optional, 1–2 lines)</span></label>
                       <input
                         name="lacks"
                         value={startupExpDetails.lacks}
@@ -422,16 +430,22 @@ export default function StartupJobsApplyPage() {
                   </div>
                 )}
                 <div>
-                  <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
-                    Are you open to working in a startup?
+                  <div className="font-medium mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>
+                    If given a chance to work in a startup and gain real-world experience, would you be open to it?
                   </div>
-                  <div className="flex gap-4">
-                    {['Yes', 'No', 'Maybe'].map(opt => (
-                      <label key={opt} className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>
-                        <input type="radio" name="openToStartup" value={opt} checked={openToStartup === opt} onChange={() => setOpenToStartup(opt)} className="accent-[#41E5FF]" />
-                        <span>{opt}</span>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="openToStartup" value="yes" checked={openToStartup === 'yes'} onChange={() => setOpenToStartup('yes')} className="accent-[#41E5FF]" />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes, definitely</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="openToStartup" value="maybe" checked={openToStartup === 'maybe'} onChange={() => setOpenToStartup('maybe')} className="accent-[#41E5FF]" />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Maybe, I'd like to explore</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="openToStartup" value="no" checked={openToStartup === 'no'} onChange={() => setOpenToStartup('no')} className="accent-[#41E5FF]" />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Not right now</span>
                       </label>
-                    ))}
                   </div>
                 </div>
                 <div className="flex flex-row justify-between gap-6 mt-4 w-full">
@@ -469,7 +483,7 @@ export default function StartupJobsApplyPage() {
         <div className="flex w-full min-h-screen">
           <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
             <div className="max-w-lg mx-auto w-full">
-              <StepBar step={4} totalSteps={5} />
+              <StepBar step={4} totalSteps={6} />
               <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Upload Your Resume</div>
               <form className="space-y-6 w-full">
                 <div>
@@ -578,7 +592,7 @@ export default function StartupJobsApplyPage() {
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onClick={() => setStep(5)}
                   >
-                    Submit
+                    Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </button>
                 </div>
               </form>
@@ -593,18 +607,115 @@ export default function StartupJobsApplyPage() {
           </div>
         </div>
       )}
-      {/* Step 5: Success Screen */}
+      {/* Step 5: Personalization */}
       {step === 5 && (
-        <div className="flex w-full min-h-screen items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-lg p-12 max-w-xl mx-auto flex flex-col items-center">
-            <img src="/images/celebration.png" alt="Success" className="w-32 h-32 mb-6" />
-            <h2 className="text-3xl font-bold text-[#23262F] mb-4" style={{ fontFamily: 'Archivo, sans-serif' }}>Application Submitted!</h2>
-            <p className="text-lg text-[#31343D] mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Thank you for applying to explore startup jobs with IdeaAscend. Our team will review your application and reach out if there's a good match.
-            </p>
-            <a href="/startup-jobs" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Back to Startup Jobs
-            </a>
+        <div className="flex w-full min-h-screen">
+          <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-between">
+            <div>
+              <StepBar step={5} totalSteps={6} />
+              <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Help us to personalize your experience better!</div>
+              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>Who would you like to connect with in the startup ecosystem?</div>
+              <div className="flex flex-col gap-2 mb-6">
+                {jobSeekerConnectOptions.map(option => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={jobSeekerConnect.includes(option)}
+                      onChange={() => {
+                        if (jobSeekerConnect.includes(option)) {
+                          setJobSeekerConnect(jobSeekerConnect.filter(item => item !== option));
+                        } else {
+                          setJobSeekerConnect([...jobSeekerConnect, option]);
+                        }
+                      }}
+                      className="accent-[#41E5FF]"
+                    />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 400, color: '#23262F' }}>What type of collaboration opportunities interest you?</div>
+              <div className="flex flex-col gap-2 mb-6">
+                {jobSeekerCollabOptions.map(option => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={jobSeekerCollab.includes(option)}
+                      onChange={() => {
+                        if (jobSeekerCollab.includes(option)) {
+                          setJobSeekerCollab(jobSeekerCollab.filter(item => item !== option));
+                        } else {
+                          setJobSeekerCollab([...jobSeekerCollab, option]);
+                        }
+                      }}
+                      className="accent-[#41E5FF]"
+                    />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-row justify-between gap-6 mt-8 mb-2 w-full">
+              <button
+                type="button"
+                onClick={() => setStep(4)}
+                className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M13 10H7m0 0l2-2m-2 2l2 2" stroke="#41E5FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(6)}
+                className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                Next
+                <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-white text-center">
+            <img src="/images/customization%20calci.png" alt="Personalize Experience" className="max-w-lg w-full mb-8" />
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Tailored Just for You</div>
+            <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+              Your interests help us curate personalized content, job recommendations, and networking opportunities that align with your career goals and passions.
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Step 6: Thank You & Community */}
+      {step === 6 && (
+        <div className="flex w-full min-h-screen">
+          <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+            <div className="max-w-lg mx-auto w-full text-center">
+              <div className="mb-6">
+                <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mx-auto mb-4">
+                  <circle cx="40" cy="40" r="40" fill="#22CCB2"/>
+                  <path d="M25 40l10 10 20-20" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h2 className="font-archivo font-semibold text-[32px] md:text-[40px] mb-4 text-[#23262F]">Thank You for Submitting!</h2>
+              <p className="font-inter text-[18px] text-[#23262F] mb-6 max-w-lg">Your information has been successfully submitted. Now, join the IdeaAscend Job Seeker Community!</p>
+              <p className="font-inter text-[16px] text-[#6B7280] mb-8 max-w-lg">Connect with like-minded job seekers, share experiences, and stay updated with the latest startup opportunities. Our WhatsApp community is the perfect place to network, learn, and grow together.</p>
+              <button
+                onClick={() => {
+                  window.open('https://chat.whatsapp.com/EEihbPQHV6S2edQzaJYWlu', '_blank');
+                  window.location.href = '/startup-jobs';
+                }}
+                className="px-10 py-4 rounded-[10px] bg-[#22CCB2] text-white font-semibold text-lg shadow-lg transition-all hover:bg-[#1CA88F] flex items-center gap-3 justify-center mx-auto"
+              >
+                Join IdeaAscend Job Seeker Community
+              </button>
+            </div>
+          </div>
+          <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-white text-center">
+            <img src="/images/Blogs/dream%20job.png" alt="Thank You" className="max-w-lg w-full mb-8" />
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Your Journey Begins Here!</div>
+            <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
+              Join our vibrant community of job seekers and startup enthusiasts. Together, we'll help you find the perfect role in an exciting startup.
+            </div>
           </div>
         </div>
       )}

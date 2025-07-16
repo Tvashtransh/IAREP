@@ -11,15 +11,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/pitch/page": [
+    "/business-form/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/pitch/page.js"
+      "static/chunks/app/business-form/page.js"
     ],
-    "/api/submit-pitch/route": [
+    "/api/submit-business-form/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/submit-pitch/route.js"
+      "static/chunks/app/api/submit-business-form/route.js"
+    ],
+    "/startup-jobs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/startup-jobs/page.js"
+    ],
+    "/startup-jobs/apply/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/startup-jobs/apply/page.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

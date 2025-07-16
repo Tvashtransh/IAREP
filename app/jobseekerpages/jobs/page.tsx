@@ -43,7 +43,27 @@ const mockJobs: Job[] = [
   // Add more mock jobs as needed
 ];
 
-export default function FindJobsPage() {
+function StepBar({ step, totalSteps }: { step: number; totalSteps: number }) {
+  return (
+    <div className="flex items-center mb-8 mt-[50px] w-full max-w-lg mx-auto">
+      {Array.from({ length: totalSteps }, (_, i) => i + 1).map((s) => (
+        <div
+          key={s}
+          className={`flex-1 h-2 rounded-md mr-1.5 last:mr-0 ${step >= s ? 'bg-[#41E5FF] shadow-[0_4px_9px_0_rgba(65,229,255,0.11),0_0px_2px_0_rgba(65,229,255,0.12)]' : 'bg-[#DEE3EB]'}`}
+        ></div>
+      ))}
+    </div>
+  );
+}
+
+const TOTAL_STEPS = 3;
+
+export default function JobSeekerForm() {
+  const [step, setStep] = useState(1);
+  // Mock state for form fields
+  const [basicInfo, setBasicInfo] = useState({ name: '', email: '' });
+  const [careerInterest, setCareerInterest] = useState('');
+  const [resume, setResume] = useState<File | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     location: '',
@@ -53,100 +73,117 @@ export default function FindJobsPage() {
   });
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    // Implement search logic
-  };
-
-  const handleFilterChange = (filterType: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterType]: value
-    }));
-    // Implement filter logic
-  };
-
-  const handleApply = (jobId: string) => {
-    // Implement apply logic
-    console.log('Applying to job:', jobId);
-  };
-
-  const handleContact = (jobId: string) => {
-    // Implement contact logic
-    console.log('Contacting about job:', jobId);
-  };
-
-  // Animation: when a job is selected, cards move to a vertical column and detail appears
+  // Step 1: Basic Info
+  if (step === 1) {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="py-8">
-        <SearchFilters
-          onSearch={handleSearch}
-          onFilterChange={handleFilterChange}
-        />
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {mockJobs.length} results for '{searchQuery || 'UX UI Designer'}'
-          </h2>
+      <div className="min-h-screen flex bg-[#F7F9FB] font-inter font-normal text-[14px]">
+        <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+          <div className="max-w-lg mx-auto w-full">
+            <StepBar step={1} totalSteps={TOTAL_STEPS} />
+            <div className="mb-4 mt-[45px] font-archivo text-[30px] font-semibold text-[#23262F]">Basic Information</div>
+            <form className="space-y-6 w-full">
+              <div>
+                <label className="block text-[#23262F] mb-1 font-archivo text-[18px] font-semibold">Full Name</label>
+                <input
+                  type="text"
+                  value={basicInfo.name}
+                  onChange={e => setBasicInfo({ ...basicInfo, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] font-inter"
+                  style={{ color: '#23262F' }}
+                />
+              </div>
+              <div>
+                <label className="block text-[#23262F] mb-1 font-archivo text-[18px] font-semibold">Email</label>
+                <input
+                  type="email"
+                  value={basicInfo.email}
+                  onChange={e => setBasicInfo({ ...basicInfo, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] font-inter"
+                  style={{ color: '#23262F' }}
+                />
+              </div>
+              <div className="flex flex-row justify-between gap-6 mt-4 w-full">
+                <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF] opacity-50 cursor-not-allowed" disabled>Previous</button>
+                <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" onClick={() => setStep(2)}>Next</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className={`flex gap-12 transition-all duration-500 ${selectedJob ? 'items-start' : ''} mb-10`}> 
-          {/* Left: Job List */}
-          <div className={`transition-all duration-500 ${selectedJob ? 'w-[360px]' : 'flex-1'} ${selectedJob ? 'flex flex-col gap-6' : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10'}`}>
+        <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-8">
+          <Image src="/images/Blogs/job.png" alt="Job Search" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+          <div className="mb-2 font-archivo text-[40px] font-bold text-[#23262F]">Find Your Dream Job</div>
+          <div className="mb-6 max-w-lg mx-auto font-inter text-[16px] font-normal text-[#31343D]">Start your journey by sharing your basic details. We'll help you discover the best opportunities in the startup ecosystem.</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 2: Career Interests
+  if (step === 2) {
+    return (
+      <div className="min-h-screen flex bg-[#F7F9FB] font-inter font-normal text-[14px]">
+        <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+          <div className="max-w-lg mx-auto w-full">
+            <StepBar step={2} totalSteps={TOTAL_STEPS} />
+            <div className="mb-4 mt-[45px] font-archivo text-[30px] font-semibold text-[#23262F]">Your Career Interests</div>
+            <form className="space-y-6 w-full">
+              <div>
+                <label className="block text-[#23262F] mb-1 font-archivo text-[18px] font-semibold">What type of roles are you most interested in?</label>
+                <input
+                  type="text"
+                  value={careerInterest}
+                  onChange={e => setCareerInterest(e.target.value)}
+                  placeholder="E.g., Software Developer, Product Manager, Marketing, etc."
+                  className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] font-inter"
+                  style={{ color: '#23262F' }}
+                />
+              </div>
+              <div className="flex flex-row justify-between gap-6 mt-4 w-full">
+                <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" onClick={() => setStep(1)}>Previous</button>
+                <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" onClick={() => setStep(3)}>Next</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-8">
+          <Image src="/images/Blogs/job.png" alt="Job Search" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+          <div className="mb-2 font-archivo text-[40px] font-bold text-[#23262F]">Explore Your Interests</div>
+          <div className="mb-6 max-w-lg mx-auto font-inter text-[16px] font-normal text-[#31343D]">Tell us about your career interests so we can match you with the most relevant startup jobs and connections.</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 3: Job List (mocked)
+  return (
+    <div className="min-h-screen flex bg-[#F7F9FB] font-inter font-normal text-[14px]">
+      <div className="w-full md:w-1/2 flex flex-col px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+        <div className="max-w-lg mx-auto w-full">
+          <StepBar step={3} totalSteps={TOTAL_STEPS} />
+          <div className="mb-4 mt-[45px] font-archivo text-[30px] font-semibold text-[#23262F]">Available Startup Jobs</div>
+          <div className="space-y-4">
             {mockJobs.map(job => (
               <div
                 key={job.id}
-                className="cursor-pointer transition-all duration-300"
+                className="p-4 rounded-lg border border-[#DEE3EB] bg-[#F7F9FB]"
                 onClick={() => setSelectedJob(job)}
               >
-                <JobCard
-                  avatarUrl={job.logo}
-                  jobTitle={job.title}
-                  salary={job.salary}
-                  tags={[job.type]}
-                  location={job.location}
-                  company={job.company}
-                  selected={!!(selectedJob && selectedJob.id === job.id)}
-                />
+                <div className="font-archivo text-lg font-semibold text-[#23262F]">{job.title}</div>
+                <div className="font-inter text-sm text-[#6B7280]">{job.company} • {job.location} • {job.salary}</div>
+                <button className="mt-2 px-6 py-2 rounded-md bg-[#41E5FF] text-white font-semibold text-sm hover:bg-[#22CCF8]">Apply</button>
               </div>
             ))}
           </div>
-          {/* Right: Job Detail */}
-          {selectedJob && (
-            <JobDetailCard
-              jobTitle={selectedJob.title}
-              salary={selectedJob.salary}
-              companyName={selectedJob.company}
-              location={selectedJob.location}
-              workSchedule={"Mon - Fri"}
-              companySize={"100 - 300 employees"}
-              postedTime={selectedJob.postedDate}
-              description={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem lorem aliquam sed lacinia quis. Nibh dictumst vulputate odio pellentesque sit quis ac, sit ipsum. Sit rhoncus velit in sed massa arcu sit eu."}
-              responsibilities={[
-                "Lorem ipsum dolor sit amet",
-                "Consectetur adipiscing elit. Lorem lorem aliquam sed lacinia quis.",
-                "Nibh dictumst vulputate odio pellentesque sit quis ac, sit ipsum."
-              ]}
-              bannerImage={selectedJob.logo}
-              recruiterName={"Romy Murray"}
-              recruiterRole={"Hiring Manager"}
-              recruiterAvatar={"/recruiters/romy-murray.jpg"}
-              companyDesc={"Incididunt velit consequat eu esse cillum ut elit ad ut irure dolore sunt Lorem tempor consectetur esse culpa dolor. Ut non minim dolor irure tempor esse aute culpa eu enim."}
-              companyLogo={selectedJob.logo}
-              companyType={"Outsource"}
-              onSave={() => {}}
-              onApply={() => {}}
-            />
-          )}
-        </div>
-        {!selectedJob && (
-          <div className="mt-8 flex justify-center">
-            <button className="px-6 py-2 border border-[#41E5FF] text-[#41E5FF] rounded-lg hover:bg-[#41E5FF] hover:text-white transition-colors">
-              Show more
-            </button>
+          <div className="flex flex-row justify-between gap-6 mt-8 w-full">
+            <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" onClick={() => setStep(2)}>Previous</button>
+            <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]">Submit</button>
           </div>
-        )}
+        </div>
+          </div>
+      <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-8">
+        <Image src="/images/Blogs/job.png" alt="Job Search" width={320} height={320} className="mx-auto rounded-lg mb-8" />
+        <div className="mb-2 font-archivo text-[40px] font-bold text-[#23262F]">Apply and Get Hired</div>
+        <div className="mb-6 max-w-lg mx-auto font-inter text-[16px] font-normal text-[#31343D]">Browse and apply to curated startup jobs. We'll help you connect with the right teams and opportunities.</div>
       </div>
     </div>
   );

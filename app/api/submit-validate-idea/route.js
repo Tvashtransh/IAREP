@@ -18,19 +18,26 @@ export async function POST(request) {
       city: formData.userDetails?.city || '',
       linkedin: formData.userDetails?.linkedin || '',
       
-      // Idea details
+      // Aspiring idea details
       idea_name: formData.aspiringIdea?.name || '',
-      industry: formData.aspiringIdea?.industry || '',
+      idea_industry: formData.aspiringIdea?.industry || '',
       interests: formData.aspiringInterests || [],
       idea_description: formData.ideaDescription || '',
       
-      // Startup details
+      // Idea details (Step 3)
       current_stage: formData.ideaDetailsStep3?.stage || '',
       team_size: formData.ideaDetailsStep3?.team || '',
       revenue_status: formData.ideaDetailsStep3?.revenue || '',
       target_audience: formData.ideaDetailsStep3?.targetAudience || '',
       business_model: formData.ideaDetailsStep3?.businessModel || '',
       achievements: formData.ideaDetailsStep3?.achievements || '',
+      
+      // Founder/validation details
+      founder_duration: formData.founderDuration || '',
+      founder_product_status: formData.founderProductStatus || '',
+      founder_stage: formData.founderStage || '',
+      has_business: formData.aspiringHasBusiness || '',
+      product_link: formData.aspiringProductLink || '',
       
       // Challenges and approaches
       challenges: formData.aspiringChallenges || [],
@@ -43,14 +50,7 @@ export async function POST(request) {
       looking_for: formData.aspiringLookingFor || [],
       ascendthon_interest: formData.aspiringAscendThon || '',
       
-      // Founder specific fields
-      founder_duration: formData.founderDuration || '',
-      founder_product_status: formData.founderProductStatus || '',
-      founder_stage: formData.founderStage || '',
-      has_business: formData.aspiringHasBusiness || '',
-      product_link: formData.aspiringProductLink || '',
-      
-      // File uploads (we'll handle file upload separately if needed)
+      // Pitch deck information
       pitch_deck_file_name: formData.pitchDeckFile?.name || '',
       pitch_deck_link: formData.pitchDeckLink || ''
     };

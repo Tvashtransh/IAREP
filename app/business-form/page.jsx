@@ -100,6 +100,15 @@ export default function BusinessFormPage() {
   });
   const [aspiringDetailsErrors, setAspiringDetailsErrors] = useState({});
 
+  // Add state for aspiring duration
+  const [aspiringDuration, setAspiringDuration] = useState('');
+
+  // Add state for aspiring validation
+  const [aspiringValidation, setAspiringValidation] = useState('');
+
+  // Add state for aspiring prototype
+  const [aspiringPrototype, setAspiringPrototype] = useState('');
+
   // Add state for detailed idea description step
   const [ideaDescription, setIdeaDescription] = useState('');
   const [ideaDescriptionError, setIdeaDescriptionError] = useState('');
@@ -431,6 +440,7 @@ export default function BusinessFormPage() {
   const [aspiringLookingFor, setAspiringLookingFor] = useState([]);
   const [aspiringAscendThon, setAspiringAscendThon] = useState('');
   const [aspiringStep6Errors, setAspiringStep6Errors] = useState({});
+  const [aspiringStep8Errors, setAspiringStep8Errors] = useState({});
 
   // State for early-stage founder step 3 (copy of aspiring step 3)
   const [founderIdea, setFounderIdea] = useState({
@@ -647,6 +657,9 @@ export default function BusinessFormPage() {
     }
   };
 
+  const [jobSeekerRoles, setJobSeekerRoles] = useState('');
+  const [jobSeekerHopes, setJobSeekerHopes] = useState('');
+
   return (
     <>
       <div className="min-h-screen flex bg-[#F7F9FB] font-inter font-normal text-[14px]" suppressHydrationWarning={true}>
@@ -783,8 +796,7 @@ export default function BusinessFormPage() {
         {/* Step 3: Job Seeker Interests */}
         {step === 3 && selected === 'jobseeker' && (
           <div className="flex w-full min-h-screen">
-            {/* Left: Job Seeker Interests */}
-            <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-center">
+            <div className="w-full md:w-1/2 flex flex-col px-12 py-10 bg-white justify-center">
               <div className="max-w-lg mx-auto w-full">
                 <StepBar step={3} totalSteps={6} />
                 <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Your Career Interests</div>
@@ -795,6 +807,8 @@ export default function BusinessFormPage() {
               </div>
                     <input
                       type="text"
+                      value={jobSeekerRoles}
+                      onChange={e => setJobSeekerRoles(e.target.value)}
                       placeholder="E.g., Software Developer, Product Manager, Marketing, etc."
                       className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
                       style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
@@ -802,168 +816,23 @@ export default function BusinessFormPage() {
                   </div>
                   <div>
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
-                      Who would you like to connect with in the startup ecosystem?
+                      What are you hoping to get out of your next role?
                     </div>
-                    <div className="flex flex-col gap-2">
-                      {jobSeekerConnectOptions.map(option => (
-                        <label key={option} className="flex items-center gap-2 cursor-pointer text-[#23262F]">
                           <input
-                            type="checkbox"
-                            checked={jobSeekerConnect.includes(option)}
-                            onChange={() => {
-                              if (jobSeekerConnect.includes(option)) {
-                                setJobSeekerConnect(jobSeekerConnect.filter(item => item !== option));
-                              } else {
-                                setJobSeekerConnect([...jobSeekerConnect, option]);
-                              }
-                            }}
-                            className="accent-[#41E5FF]"
-                          />
-                          <span>{option}</span>
-                        </label>
-            ))}
-          </div>
+                      type="text"
+                      value={jobSeekerHopes}
+                      onChange={e => setJobSeekerHopes(e.target.value)}
+                      placeholder="E.g., learning, mentorship, impact, growth, etc."
+                      className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
+                      style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
+                    />
                 </div>
                   <div>
                     <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
-                      What type of collaboration opportunities interest you?
+                      Select up to 5 topics that interest you:
                     </div>
-                    <div className="flex flex-col gap-2">
-                      {jobSeekerCollabOptions.map(option => (
-                        <label key={option} className="flex items-center gap-2 cursor-pointer text-[#23262F]">
-                          <input
-                            type="checkbox"
-                            checked={jobSeekerCollab.includes(option)}
-                            onChange={() => {
-                              if (jobSeekerCollab.includes(option)) {
-                                setJobSeekerCollab(jobSeekerCollab.filter(item => item !== option));
-                              } else {
-                                setJobSeekerCollab([...jobSeekerCollab, option]);
-                              }
-                            }}
-                            className="accent-[#41E5FF]"
-                          />
-                          <span>{option}</span>
-                        </label>
-                      ))}
+                    <InterestsSelector />
                     </div>
-                  </div>
-                  
-                  {/* Resume Upload Section */}
-                  <div>
-                    <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>
-                      Share Your Resume <span className="text-gray-400">(Optional)</span>
-                    </div>
-                    
-                    {/* Upload Method Toggle */}
-                    <div className="flex gap-4 mb-4">
-                      <button
-                        type="button"
-                        onClick={() => setResumeUploadMethod('file')}
-                        className={`px-4 py-2 rounded-md border transition-all ${
-                          resumeUploadMethod === 'file' 
-                            ? 'bg-[#41E5FF] text-white border-[#41E5FF]' 
-                            : 'bg-white text-[#23262F] border-[#DEE3EB] hover:border-[#41E5FF]'
-                        }`}
-                        style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}
-                      >
-                        Upload File
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setResumeUploadMethod('link')}
-                        className={`px-4 py-2 rounded-md border transition-all ${
-                          resumeUploadMethod === 'link' 
-                            ? 'bg-[#41E5FF] text-white border-[#41E5FF]' 
-                            : 'bg-white text-[#23262F] border-[#DEE3EB] hover:border-[#41E5FF]'
-                        }`}
-                        style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 400 }}
-                      >
-                        Share Link
-                      </button>
-                    </div>
-
-                    {resumeUploadMethod === 'file' ? (
-                      <div>
-                        {/* File Upload Area */}
-                        <div
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          className={`border-2 border-dashed rounded-lg p-6 text-center transition-all cursor-pointer ${
-                            isDragOver 
-                              ? 'border-[#41E5FF] bg-[#F7FCFF]' 
-                              : 'border-[#DEE3EB] bg-[#F7F9FB] hover:border-[#41E5FF] hover:bg-[#F7FCFF]'
-                          }`}
-                          onClick={() => document.getElementById('resume-upload')?.click()}
-                        >
-                          <input
-                            id="resume-upload"
-                            type="file"
-                            accept=".pdf,.jpg,.jpeg,.png"
-                            onChange={handleFileInputChange}
-                            className="hidden"
-                          />
-                          
-                          {resumeFile ? (
-                            <div className="space-y-2">
-                              <div className="text-green-600">
-                                <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                              </div>
-                              <div className="text-[#23262F] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                {resumeFile.name}
-                              </div>
-                              <div className="text-[#6B7280] text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                {(resumeFile.size / 1024 / 1024).toFixed(2)} MB
-                              </div>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setResumeFile(null);
-                                }}
-                                className="text-[#41E5FF] text-sm hover:underline"
-                                style={{ fontFamily: 'Inter, sans-serif' }}
-                              >
-                                Remove file
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="space-y-2">
-                              <div className="text-[#6B7280]">
-                                <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                              </div>
-                              <div className="text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 500 }}>
-                                Drop your resume here or click to browse
-                              </div>
-                              <div className="text-[#6B7280] text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                Supported formats: PDF, JPG, PNG (Max 10MB)
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <input
-                          type="url"
-                          placeholder="Paste your Google Drive link, LinkedIn profile, or portfolio URL"
-                          value={resumeLink}
-                          onChange={(e) => setResumeLink(e.target.value)}
-                          className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
-                          style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
-                        />
-                        <div className="text-[#6B7280] text-xs mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Make sure your link is publicly accessible or set to "Anyone with the link can view"
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
                   <div className="flex flex-row justify-between gap-6 mt-4 w-full">
                 <button
                   type="button"
@@ -985,12 +854,11 @@ export default function BusinessFormPage() {
                 </form>
               </div>
             </div>
-            {/* Right: Illustration */}
-                          <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-white text-center">
-                <img src="/images/Blogs/job.png" alt="Career Interests" className="max-w-lg w-full mb-8" />
-              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Discover Your Path</div>
+            <div className="w-full md:w-1/2 flex flex-col items-center justify-center bg-[#F7F9FB] text-center px-8">
+              <img src="/images/goal%20target.png" alt="Career Interests" className="max-w-lg w-full mb-8" />
+              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Shape Your Path</div>
               <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
-                Share your career interests and networking preferences so we can connect you with the right opportunities and communities in the startup ecosystem.
+                Tell us what excites you most about working in a startup. Your interests help us match you with the right opportunities.
               </div>
             </div>
           </div>
@@ -1248,7 +1116,7 @@ export default function BusinessFormPage() {
                   <div className="flex flex-col gap-2">
                     {['Less than 1 month', '1–6 months', '6–12 months', 'More than 1 year'].map(opt => (
                       <label key={opt} className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
-                        <input type="radio" name="aspiringDuration" value={opt} checked={founderDuration === opt} onChange={() => setFounderDuration(opt)} className="accent-[#41E5FF]" />
+                        <input type="radio" name="aspiringDuration" value={opt} checked={aspiringDuration === opt} onChange={() => setAspiringDuration(opt)} className="accent-[#41E5FF]" />
                         <span>{opt}</span>
                       </label>
             ))}
@@ -1262,7 +1130,7 @@ export default function BusinessFormPage() {
                   <div className="flex flex-col gap-2">
                     {['Yes, extensively', 'Yes, with a few people', 'Not yet', 'Not sure how to do this'].map(opt => (
                       <label key={opt} className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
-                        <input type="radio" name="aspiringValidation" value={opt} checked={founderProductStatus === opt} onChange={() => setFounderProductStatus(opt)} className="accent-[#41E5FF]" />
+                        <input type="radio" name="aspiringValidation" value={opt} checked={aspiringValidation === opt} onChange={() => setAspiringValidation(opt)} className="accent-[#41E5FF]" />
                         <span>{opt}</span>
                       </label>
                     ))}
@@ -1276,7 +1144,7 @@ export default function BusinessFormPage() {
                   <div className="flex flex-col gap-2">
                     {['Yes, I have a working prototype/MVP', 'I\'m in the process of building one', 'No, but I have detailed plans', 'No, I haven\'t started building yet'].map(opt => (
                       <label key={opt} className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>
-                        <input type="radio" name="aspiringPrototype" value={opt} checked={founderStage === opt} onChange={() => setFounderStage(opt)} className="accent-[#41E5FF]" />
+                        <input type="radio" name="aspiringPrototype" value={opt} checked={aspiringPrototype === opt} onChange={() => setAspiringPrototype(opt)} className="accent-[#41E5FF]" />
                         <span>{opt}</span>
                       </label>
                     ))}
@@ -1424,7 +1292,17 @@ export default function BusinessFormPage() {
                     type="button"
                     className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
                     style={{ fontFamily: 'Inter, sans-serif' }}
-                    onClick={() => setStep(6)}
+                    onClick={() => {
+                      const errors = {};
+                      if (!aspiringDuration) errors.duration = 'Please select how long you\'ve been working on the idea';
+                      if (!aspiringValidation) errors.validation = 'Please select if you\'ve validated your idea';
+                      if (!aspiringPrototype) errors.prototype = 'Please select if you\'ve built a prototype';
+                      if (!aspiringHasBusiness) errors.hasBusiness = 'Please select if you\'ve built a business before';
+                      setAspiringStep5Errors(errors);
+                      if (Object.keys(errors).length === 0) {
+                        setStep(6);
+                      }
+                    }}
                   >
                     Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </button>
@@ -1556,7 +1434,7 @@ export default function BusinessFormPage() {
                       if (aspiringApproaches.length === 0) errors.approaches = 'Select at least 1 approach';
                       if (!aspiringSatisfaction) errors.satisfaction = 'Please select your satisfaction level';
                       setAspiringStep5Errors(errors);
-                      if (Object.keys(errors).length === 0) setStep(7);
+                      if (Object.keys(errors).length === 0) setStep(8);
                     }}
                   >
                     Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -1586,7 +1464,7 @@ export default function BusinessFormPage() {
               <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 24, fontWeight: 600, color: '#23262F' }}>Motivation & Goals</div>
               <form className="space-y-6 w-full">
                 <div>
-                  <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Why did you start this idea?</label>
+                  <label className="block text-[#23262F] mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400 }}>Why do you want to start this venture?</label>
                   <textarea
                     name="aspiringMotivationStep"
                     value={aspiringMotivationStep}
@@ -1606,25 +1484,44 @@ export default function BusinessFormPage() {
                     className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB]"
                     style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}
                     rows={3}
-                    placeholder="E.g., launch MVP, gain first customers, find co-founder, etc."
+                    placeholder="E.g., validate idea, build MVP, find co-founder, etc."
                   />
                 </div>
                 <div className="flex flex-row justify-between gap-6 mt-4 w-full">
-                  <button type="button" className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => setStep(7)}>Previous</button>
-                  <button type="button" className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]" style={{ fontFamily: 'Inter, sans-serif' }} onClick={() => {
-                    // No validation needed for Motivation & Goals step - it's optional
+                  <button
+                    type="button"
+                    className="px-8 py-3 rounded-[6px] border border-[#41E5FF] text-[#41E5FF] bg-white font-normal text-lg flex items-center gap-2 transition-all hover:bg-[#F7FCFF]"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onClick={() => setStep(6)}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onClick={() => {
+                      const errors = {};
+                      if (!aspiringMotivationStep) errors.motivation = 'Please share your motivation';
+                      if (!aspiringGoalsStep) errors.goals = 'Please share your goals';
+                      setAspiringStep8Errors(errors);
+                      if (Object.keys(errors).length === 0) {
                     setStep(9);
-                  }}>Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+                      }
+                    }}
+                  >
+                    Next <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </button>
                 </div>
               </form>
             </div>
           </div>
-          {/* Right: Illustration (hidden on mobile) */}
-          <div className="hidden md:flex w-full md:w-1/2 flex-col items-center justify-center bg-[#F7F9FB] text-center px-4 md:px-8 py-6 md:py-10">
+          {/* Right: Illustration */}
+          <div className="hidden md:flex w-full md:w-1/2 px-4 md:px-8 py-6 md:py-10 flex-col items-center justify-center bg-[#F7F9FB] text-center">
             <img src="/images/idea.png" alt="Motivation & Goals" className="max-w-lg w-full mb-8" />
-            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Fuel Your Vision</div>
+            <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 40, fontWeight: 700, color: '#23262F' }}>Drive Your Success</div>
             <div className="mb-6 max-w-lg mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#31343D' }}>
-              Your motivation and goals drive your entrepreneurial journey. Share what inspires you and what you aim to accomplish as you transform your idea into reality.
+              Your motivation and goals are the foundation of your startup journey. Share what drives you and what you aim to accomplish in the coming months.
             </div>
           </div>
         </div>
@@ -1806,36 +1703,36 @@ export default function BusinessFormPage() {
                   Have you had the chance to work in a startup environment before?
               </div>
                 <div className="flex gap-6 mb-2">
-                  <label className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ color: '#23262F' }}>
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="hasStartupExp" value="yes" checked={hasStartupExp === 'yes'} onChange={() => setHasStartupExp('yes')} className="accent-[#41E5FF]" />
-                    <span style={{ color: '#23262F' }}>Yes</span>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ color: '#23262F' }}>
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="hasStartupExp" value="no" checked={hasStartupExp === 'no'} onChange={() => setHasStartupExp('no')} className="accent-[#41E5FF]" />
-                    <span style={{ color: '#23262F' }}>No</span>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>No</span>
                   </label>
                 </div>
               </div>
               {hasStartupExp === 'yes' && (
                 <div className="mb-6 space-y-4">
                   <div>
-                    <label className="block text-[15px] mb-1 text-[#23262F]" style={{ color: '#23262F' }}>• Name of the Startup:</label>
+                    <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Name of the Startup:</label>
                     <input type="text" value={startupExpDetails.name} onChange={e => setStartupExpDetails(d => ({ ...d, name: e.target.value }))} className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F]" style={{ color: '#23262F' }} />
                   </div>
                   <div>
-                    <label className="block text-[15px] mb-1 text-[#23262F]" style={{ color: '#23262F' }}>• Your Role:</label>
+                    <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Your Role:</label>
                     <input type="text" value={startupExpDetails.role} onChange={e => setStartupExpDetails(d => ({ ...d, role: e.target.value }))} className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F]" style={{ color: '#23262F' }} />
                   </div>
                   <div>
-                    <label className="block text-[15px] mb-1 text-[#23262F]" style={{ color: '#23262F' }}>• How long did you work there?</label>
+                    <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• How long did you work there?</label>
                     <input type="text" value={startupExpDetails.duration} onChange={e => setStartupExpDetails(d => ({ ...d, duration: e.target.value }))} className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F]" style={{ color: '#23262F' }} />
                   </div>
                   <div>
-                    <label className="block text-[15px] mb-1 text-[#23262F]" style={{ color: '#23262F' }}>• What value do you believe you added to the startup? <span className="text-gray-400">(1–2 lines)</span></label>
+                    <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• What value do you believe you added to the startup? <span className="text-gray-400">(1–2 lines)</span></label>
                     <input type="text" value={startupExpDetails.value} onChange={e => setStartupExpDetails(d => ({ ...d, value: e.target.value }))} className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F]" style={{ color: '#23262F' }} />
                   </div>
                   <div>
-                    <label className="block text-[15px] mb-1 text-[#23262F]" style={{ color: '#23262F' }}>• Based on your experience, what do you think most startups lack or struggle with? <span className="text-gray-400">(Optional, 1–2 lines)</span></label>
+                    <label className="block mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>• Based on your experience, what do you think most startups lack or struggle with? <span className="text-gray-400">(Optional, 1–2 lines)</span></label>
                     <input type="text" value={startupExpDetails.lacks} onChange={e => setStartupExpDetails(d => ({ ...d, lacks: e.target.value }))} className="w-full px-4 py-3 rounded-md border border-[#DEE3EB] focus:border-[#41E5FF] focus:outline-none text-[16px] font-normal bg-[#F7F9FB] text-[#23262F]" style={{ color: '#23262F' }} />
                   </div>
                 </div>
@@ -1846,17 +1743,17 @@ export default function BusinessFormPage() {
                     If given a chance to work in a startup and gain real-world experience, would you be open to it?
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ color: '#23262F' }}>
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input type="radio" name="openToStartup" value="yes" checked={openToStartup === 'yes'} onChange={() => setOpenToStartup('yes')} className="accent-[#41E5FF]" />
-                      <span style={{ color: '#23262F' }}>Yes, definitely</span>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Yes, definitely</span>
                     </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ color: '#23262F' }}>
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input type="radio" name="openToStartup" value="maybe" checked={openToStartup === 'maybe'} onChange={() => setOpenToStartup('maybe')} className="accent-[#41E5FF]" />
-                      <span style={{ color: '#23262F' }}>Maybe, I'd like to explore</span>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Maybe, I'd like to explore</span>
                     </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-[#23262F]" style={{ color: '#23262F' }}>
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input type="radio" name="openToStartup" value="no" checked={openToStartup === 'no'} onChange={() => setOpenToStartup('no')} className="accent-[#41E5FF]" />
-                      <span style={{ color: '#23262F' }}>Not right now</span>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>Not right now</span>
                     </label>
                   </div>
                 </div>
@@ -1884,14 +1781,50 @@ export default function BusinessFormPage() {
           <div className="w-full md:w-1/2 px-4 md:px-12 py-6 md:py-10 bg-white justify-between">
             {/* Logo and Progress */}
             <div>
-              <div className="flex items-center mb-8">
-              </div>
+              <div className="flex items-center mb-8"></div>
               <StepBar step={5} totalSteps={6} />
-              <div className="text-3xl font-bold text-[#23262F] mb-2 mt-[45px] leading-tight">Help us to personalize your experience<br />better!</div>
-              <div className="text-[#31343D] text-[16px] font-normal mb-6 mt-2">Select up to 5 topics that interest you.</div>
+              <div className="mb-4 mt-[45px]" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 30, fontWeight: 600, color: '#23262F' }}>Help us to personalize your experience better!</div>
+              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>Who would you like to connect with in the startup ecosystem?</div>
+              <div className="flex flex-col gap-2 mb-6">
+                {jobSeekerConnectOptions.map(option => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={jobSeekerConnect.includes(option)}
+                      onChange={() => {
+                        if (jobSeekerConnect.includes(option)) {
+                          setJobSeekerConnect(jobSeekerConnect.filter(item => item !== option));
+                        } else {
+                          setJobSeekerConnect([...jobSeekerConnect, option]);
+                        }
+                      }}
+                      className="accent-[#41E5FF]"
+                    />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                  </label>
+                ))}
             </div>
-            {/* Interest Tags */}
-            <InterestsSelector />
+              <div className="mb-2" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 600, color: '#23262F' }}>What type of collaboration opportunities interest you?</div>
+              <div className="flex flex-col gap-2 mb-6">
+                {jobSeekerCollabOptions.map(option => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={jobSeekerCollab.includes(option)}
+                      onChange={() => {
+                        if (jobSeekerCollab.includes(option)) {
+                          setJobSeekerCollab(jobSeekerCollab.filter(item => item !== option));
+                        } else {
+                          setJobSeekerCollab([...jobSeekerCollab, option]);
+                        }
+                      }}
+                      className="accent-[#41E5FF]"
+                    />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 400, color: '#23262F' }}>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
             {/* Navigation Buttons */}
             <div className="flex flex-row justify-between gap-6 mt-8 mb-2 w-full">
               <button
@@ -1906,14 +1839,9 @@ export default function BusinessFormPage() {
               <div className="flex flex-row gap-6">
               <button
                 type="button"
-                  onClick={() => {
-                    if (selectedInterests.length > 0) {
-                      setStep(6);
-                    }
-                  }}
-                  className={`px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8] ${selectedInterests.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={() => setStep(6)}
+                  className="px-8 py-3 rounded-[6px] bg-[#41E5FF] text-white font-normal text-lg flex items-center gap-2 shadow transition-all hover:bg-[#22CCF8]"
                   style={{ fontFamily: 'Inter, sans-serif' }}
-                  disabled={selectedInterests.length === 0}
                 >
                   Next
                   <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7 10h6m0 0l-2-2m2 2l-2 2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>

@@ -3,9 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 export default function ValidateIdeaSubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,8 +15,10 @@ export default function ValidateIdeaSubmissionsPage() {
 
   const fetchSubmissions = async () => {
     try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       const supabase = createClient(supabaseUrl, supabaseKey);
-      
+
       const { data, error } = await supabase
         .from('validate_idea_submissions')
         .select('*')
@@ -34,19 +33,6 @@ export default function ValidateIdeaSubmissionsPage() {
       setError(err.message);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const openFileInNewTab = (fileInfo) => {
-    if (fileInfo?.publicUrl) {
-      window.open(fileInfo.publicUrl, '_blank');
-    } else if (fileInfo?.filePath) {
-      // Construct URL from file path
-      const supabase = createClient(supabaseUrl, supabaseKey);
-      const { data } = supabase.storage.from('uploads').getPublicUrl(fileInfo.filePath);
-      window.open(data.publicUrl, '_blank');
-    } else {
-      alert('File URL not available');
     }
   };
 
@@ -104,7 +90,7 @@ export default function ValidateIdeaSubmissionsPage() {
                       Submitted: {formatDate(submission.created_at)}
                     </p>
                   </div>
-                  <button
+                  <button 
                     onClick={() => setSelectedSubmission(selectedSubmission === submission.id ? null : submission.id)}
                     className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
                   >
@@ -115,6 +101,10 @@ export default function ValidateIdeaSubmissionsPage() {
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
+                    <span className="font-medium text-gray-700">Role:</span>
+                    <p className="text-gray-900">{submission.role}</p>
+                  </div>
+                  <div>
                     <span className="font-medium text-gray-700">Idea Name:</span>
                     <p className="text-gray-900">{submission.idea_name}</p>
                   </div>
@@ -122,35 +112,9 @@ export default function ValidateIdeaSubmissionsPage() {
                     <span className="font-medium text-gray-700">Industry:</span>
                     <p className="text-gray-900">{submission.idea_industry}</p>
                   </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Stage:</span>
-                    <p className="text-gray-900">{submission.current_stage}</p>
-                  </div>
                 </div>
 
-                {/* Pitch Deck */}
-                {submission.pitch_deck_file_info && (
-                  <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-medium text-blue-800">Pitch Deck:</span>
-                        <p className="text-blue-700">
-                          {submission.pitch_deck_file_info.originalName || submission.pitch_deck_file_info.name}
-                          {submission.pitch_deck_file_info.size && (
-                            <span className="text-sm"> ({Math.round(submission.pitch_deck_file_info.size / 1024)} KB)</span>
-                          )}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => openFileInNewTab(submission.pitch_deck_file_info)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                      >
-                        View File
-                      </button>
-                    </div>
-                  </div>
-                )}
-
+                {/* Pitch Deck Links */}
                 {submission.pitch_deck_link && (
                   <div className="mb-4 p-4 bg-green-50 rounded-lg">
                     <span className="font-medium text-green-800">Pitch Deck Link:</span>
@@ -191,9 +155,11 @@ export default function ValidateIdeaSubmissionsPage() {
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-3">Business Details</h3>
                         <div className="space-y-2 text-sm">
+                          <p><span className="font-medium">Current Stage:</span> {submission.current_stage}</p>
                           <p><span className="font-medium">Team Size:</span> {submission.team_size}</p>
                           <p><span className="font-medium">Revenue Status:</span> {submission.revenue_status}</p>
                           <p><span className="font-medium">Timeline:</span> {submission.timeline}</p>
+                          <p><span className="font-medium">Founder Duration:</span> {submission.founder_duration}</p>
                           {submission.has_business && (
                             <p><span className="font-medium">Has Business:</span> {submission.has_business}</p>
                           )}
@@ -209,11 +175,11 @@ export default function ValidateIdeaSubmissionsPage() {
                       </div>
 
                       {/* Interests */}
-                      {submission.idea_interests && submission.idea_interests.length > 0 && (
+                      {submission.interests && submission.interests.length > 0 && (
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 mb-3">Interests</h3>
                           <div className="flex flex-wrap gap-2">
-                            {submission.idea_interests.map((interest, index) => (
+                            {submission.interests.map((interest, index) => (
                               <span 
                                 key={index}
                                 className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
@@ -236,6 +202,42 @@ export default function ValidateIdeaSubmissionsPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Looking For */}
+                      {submission.looking_for && submission.looking_for.length > 0 && (
+                        <div className="md:col-span-2">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Looking For</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {submission.looking_for.map((item, index) => (
+                              <span 
+                                key={index}
+                                className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                              >
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Additional Details */}
+                      <div className="md:col-span-2">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Additional Information</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <span className="font-medium">Satisfaction Level:</span>
+                            <p>{submission.satisfaction_level}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium">Ascendthon Interest:</span>
+                            <p>{submission.ascendthon_interest}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium">Platform Name:</span>
+                            <p>{submission.platform_name}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
